@@ -18,6 +18,7 @@ const initialSubscriptionState = {
 };
 
 function App() {
+  const [selectedSubscription, setSelectedSubscription] = useState("");
   const [subscriptions, setSubscriptions] = useState([
     initialSubscriptionState,
   ] as Subscription[]);
@@ -40,7 +41,7 @@ function App() {
       handler: () => {
         // eslint-disable-next-line no-console
         console.log("calling unsubscribe");
-        // unsubscribe();
+        unsubscribe(selectedSubscription);
       },
       name: "unsubscribe",
       value: "unsubscribe",
@@ -69,10 +70,25 @@ function App() {
     console.log(subscriptions);
   }, [subscriptions]);
 
+  const handleSelectionChanged = () => {
+    const selectElem = document.getElementById(
+      "subscriptions-select-input"
+    ) as HTMLInputElement;
+
+    const value = selectElem?.value;
+
+    if (value && value.length) {
+      setSelectedSubscription(value);
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <select id="subscriptions-select-input">
+        <select
+          id="subscriptions-select-input"
+          onChange={handleSelectionChanged}
+        >
           {subscriptions.map((sub) => (
             <option key={sub.uid} value={sub.uid}>
               {sub.name}
