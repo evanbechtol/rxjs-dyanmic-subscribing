@@ -6,6 +6,7 @@ import { BehaviorSubject } from "rxjs";
 import { v4 as uuidv4 } from "uuid";
 import Select from "./components/Select/Select";
 import { Subscription } from "./types";
+import SelectedStateCard from "./components/SelectedStateCard/SelectedStateContainer";
 
 const initialSubscriptionState = {
   name: "Default",
@@ -14,7 +15,9 @@ const initialSubscriptionState = {
 };
 
 function App() {
-  const [selectedSubscription, setSelectedSubscription] = useState("");
+  const [selectedSubscription, setSelectedSubscription] = useState(
+    initialSubscriptionState
+  );
   const [subscriptions, setSubscriptions] = useState([
     initialSubscriptionState,
   ] as Subscription[]);
@@ -51,7 +54,7 @@ function App() {
       handler: useCallback(() => {
         // eslint-disable-next-line no-console
         console.log("calling unsubscribe");
-        unsubscribe(selectedSubscription);
+        unsubscribe(selectedSubscription.uid);
       }, [selectedSubscription]),
       name: "unsubscribe",
       value: "unsubscribe",
@@ -62,7 +65,7 @@ function App() {
       handler: () => {
         // eslint-disable-next-line no-console
         console.log("calling update state");
-        unsubscribe(selectedSubscription);
+        unsubscribe(selectedSubscription.uid);
       },
       name: "update selected state",
       value: "update selected state",
@@ -76,12 +79,15 @@ function App() {
   }
 
   function onSelectedSubscriptionChanged(value: string) {
-    setSelectedSubscription(value);
+    const sub = subscriptions.filter((elem) => elem.uid === value)[0];
+    setSelectedSubscription(sub);
   }
 
   return (
     <div className="App">
       <header className="App-header">
+        <SelectedStateCard selectedSubscription={selectedSubscription} />
+
         <Select
           subscriptions={subscriptions}
           onSelect={onSelectedSubscriptionChanged}
@@ -104,17 +110,17 @@ function App() {
             value={btnAttrs.subscribe.value}
           />
         </div>
-      </header>
 
-      <div className="actions-container">
-        <Button
-          name={btnAttrs.updateState.name}
-          buttonText={btnAttrs.updateState.buttonText}
-          disabled={btnAttrs.updateState.disabled}
-          handler={btnAttrs.updateState.handler}
-          value={btnAttrs.updateState.value}
-        />
-      </div>
+        <div className="actions-container">
+          <Button
+            name={btnAttrs.updateState.name}
+            buttonText={btnAttrs.updateState.buttonText}
+            disabled={btnAttrs.updateState.disabled}
+            handler={btnAttrs.updateState.handler}
+            value={btnAttrs.updateState.value}
+          />
+        </div>
+      </header>
     </div>
   );
 }

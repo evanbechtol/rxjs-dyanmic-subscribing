@@ -1,0 +1,7 @@
+.selected-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  margin-bottom: 24px;
+}
