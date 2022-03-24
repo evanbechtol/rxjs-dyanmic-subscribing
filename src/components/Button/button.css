@@ -1,0 +1,15 @@
+button {
+  padding: 8px 12px;
+  margin: 4px 8px;
+  border: none;
+  font-size: 14px;
+}
+
+button .subscribe {
+  background-color: #365cb0;
+  color: #eee;
+}
+
+button .unsubscribe {
+
+}
