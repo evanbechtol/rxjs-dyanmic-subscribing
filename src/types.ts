@@ -1,5 +1,5 @@
 export interface Subscription {
   name: string;
-  subscription: any;
+  state: any;
   uid: string;
 }

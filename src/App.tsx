@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import "./App.css";
 import Button from "./components/Button/button";
 import { state } from "./store/sharedStateModule";
@@ -10,7 +10,7 @@ import SelectedStateCard from "./components/SelectedStateCard/SelectedStateConta
 
 const initialSubscriptionState = {
   name: "Default",
-  subscription: {},
+  state,
   uid: uuidv4(),
 };
 
@@ -22,13 +22,20 @@ function App() {
     initialSubscriptionState,
   ] as Subscription[]);
 
+  const [selectedState, setSelectedState] = useState(undefined);
+
   const subscribe = useCallback(
     (uid: string, newSub: BehaviorSubject<any>) => {
-      const sub = newSub.subscribe();
+      const sub = newSub.subscribe((result) => {
+        setSelectedState(result);
+      });
+
+      // eslint-disable-next-line no-console
+      console.log(sub);
       const subscriptionToAdd = {
         name: `subscriptions ${subscriptions.length + 1}`,
         uid,
-        subscription: sub,
+        state: sub,
       };
 
       setSubscriptions((prevState) => [...prevState, subscriptionToAdd]);
@@ -61,11 +68,11 @@ function App() {
     },
     updateState: {
       buttonText: "Update Selected State",
-      disabled: false,
+      disabled: selectedState === undefined,
       handler: () => {
         // eslint-disable-next-line no-console
         console.log("calling update state");
-        unsubscribe(selectedSubscription.uid);
+        updateSelectedState(selectedSubscription.uid);
       },
       name: "update selected state",
       value: "update selected state",
@@ -78,6 +85,24 @@ function App() {
     );
   }
 
+  function updateSelectedState(uid: string) {
+    const subscriptionToUpdate = subscriptions.find((sub) => sub.uid === uid);
+    const newDataForState = {
+      user: {
+        name: "Evan",
+        age: "32",
+        country: "USA",
+        gender: "Male",
+        id: uuidv4(),
+      },
+      appId: uuidv4(),
+    };
+
+    if (subscriptionToUpdate) {
+      subscriptionToUpdate?.state?.next(newDataForState);
+    }
+  }
+
   function onSelectedSubscriptionChanged(value: string) {
     const sub = subscriptions.filter((elem) => elem.uid === value)[0];
     setSelectedSubscription(sub);
@@ -86,7 +111,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <SelectedStateCard selectedSubscription={selectedSubscription} />
+        <SelectedStateCard
+          selectedSubscription={selectedSubscription}
+          selectedState={selectedState}
+        />
 
         <Select
           subscriptions={subscriptions}

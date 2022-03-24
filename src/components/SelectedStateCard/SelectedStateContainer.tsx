@@ -1,18 +1,40 @@
 import React from "react";
 import "./selectedStateCard.css";
+import { SelectedSateContainerProps } from "./types";
 
-function SelectedStateCard(props: {
-  selectedSubscription: { uid: string; name: string; subscription: {} };
-}) {
+function SelectedStateCard({
+  selectedSubscription,
+  selectedState,
+}: SelectedSateContainerProps) {
   return (
     <div className="selected-state-container">
       <h4>Selected State</h4>
       <div>
-        <small>Name: {props.selectedSubscription.name}</small>
+        <small>Name: {selectedSubscription.name}</small>
       </div>
 
       <div>
-        <small>UID: {props.selectedSubscription.uid}</small>
+        <small>UID: {selectedSubscription.uid}</small>
+      </div>
+
+      <div>
+        <small>Name: {selectedState?.user?.name}</small>
+      </div>
+
+      <div>
+        <small>Age: {selectedState?.user?.age}</small>
+      </div>
+
+      <div>
+        <small>Gender: {selectedState?.user?.gender}</small>
+      </div>
+
+      <div>
+        <small>ID: {selectedState?.user?.id}</small>
+      </div>
+
+      <div>
+        <small>App ID: {selectedState?.appId}</small>
       </div>
     </div>
   );
