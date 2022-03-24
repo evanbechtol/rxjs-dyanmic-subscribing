@@ -103,21 +103,19 @@ function App() {
           />
 
           <Button
-            name={btnAttrs.subscribe.name}
-            buttonText={btnAttrs.subscribe.buttonText}
-            disabled={btnAttrs.subscribe.disabled}
-            handler={btnAttrs.subscribe.handler}
-            value={btnAttrs.subscribe.value}
-          />
-        </div>
-
-        <div className="actions-container">
-          <Button
             name={btnAttrs.updateState.name}
             buttonText={btnAttrs.updateState.buttonText}
             disabled={btnAttrs.updateState.disabled}
             handler={btnAttrs.updateState.handler}
             value={btnAttrs.updateState.value}
+          />
+
+          <Button
+            name={btnAttrs.subscribe.name}
+            buttonText={btnAttrs.subscribe.buttonText}
+            disabled={btnAttrs.subscribe.disabled}
+            handler={btnAttrs.subscribe.handler}
+            value={btnAttrs.subscribe.value}
           />
         </div>
       </header>
